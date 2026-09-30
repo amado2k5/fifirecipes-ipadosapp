@@ -5,7 +5,7 @@
 | Item | Value |
 |------|-------|
 | Name | FiFi Recipes |
-| Bundle ID | `cooking.fifi.ios` |
+| Bundle ID | `cooking.fifi.ipados` |
 | Version | 1.0 |
 | Category | **Food & Drink** (NOT Kids — kids mode is a feature, app is for grown-ups) |
 | Copyright | © 2026 Dr. Fatma / FiFi |
@@ -64,7 +64,7 @@ that no embed/analytics have crept in.
       the AASA file already claims `/recipe/*`, `/chapter/*`, `/kids/*`
       (shared by both app variants; `cooking.fifi.ios` +
       `cooking.fifi.ipados` are both listed so either build opens links)
-- [ ] App Store Connect app record (SKU: `cooking.fifi.ios`)
+- [ ] App Store Connect app record (SKU: `cooking.fifi.ipados`)
 - [ ] Signing + archive + upload via Xcode
 - [ ] Screenshots: ready in `store/` — **iPhone 6.9" (1320×2868)**,
       **iPhone 6.5" (1284×2778)**, **iPad 13" (2064×2752)**

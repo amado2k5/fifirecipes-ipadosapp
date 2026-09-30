@@ -8,7 +8,7 @@ repo, reference client in `fifirecipes-amazonfire`). One universal binary:
 iPhone gets the bottom tab bar, iPad gets the sidebar split view, and iPad
 compact widths (Slide Over, narrow Split View) fall back to tabs.
 
-- **Bundle ID:** `cooking.fifi.ios` · **Min iOS/iPadOS:** 16 · **Swift:** 6
+- **Bundle ID:** `cooking.fifi.ipados` · **Min iOS/iPadOS:** 16 · **Swift:** 6
 - **Devices:** iPhone + iPad (`TARGETED_DEVICE_FAMILY="1,2"`) — iPad, iPad
   mini, iPad Air, iPad Pro 11"/13", iPhone, portrait + landscape
 - **Dependencies:** none — URLSession, AsyncImage, WebKit, Foundation only
