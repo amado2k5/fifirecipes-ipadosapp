@@ -1,0 +1,41 @@
+name: iPadOS CI
+
+# Private repos get limited free macOS minutes — macOS runners are billed at
+# 10x, so this runs on pushes/PRs but can also be dispatched manually.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: macos-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Select latest Xcode
+        run: sudo xcode-select -s "$(ls -d /Applications/Xcode*.app | sort -V | tail -1)"
+
+      # Runner images don't all carry the same iPad simulator names — pick
+      # whatever 11-inch Pro exists, else any iPad.
+      - name: Pick an iPad simulator
+        id: sim
+        run: |
+          NAME=$(xcrun simctl list devices available | \
+            grep -oE 'iPad Pro 11-inch \([^)]*\)' | head -1 || true)
+          [ -z "$NAME" ] && NAME=$(xcrun simctl list devices available | \
+            grep -oE 'iPad [^(]*\([^)]*\)' | head -1 || true)
+          [ -z "$NAME" ] && NAME="iPad Pro 11-inch (M4)"
+          echo "name=$NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Build and test
+        run: >-
+          xcodebuild
+          -project FifiRecipesPad.xcodeproj
+          -scheme FifiRecipesPad
+          -destination 'platform=iOS Simulator,name=${{ steps.sim.outputs.name }}'
+          -configuration Debug
+          clean test
+          CODE_SIGNING_ALLOWED=NO
