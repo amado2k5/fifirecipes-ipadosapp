@@ -51,7 +51,7 @@ final class ScreenshotTests: XCTestCase {
         }
 
         // — Kids —
-        el(app, "nav-kids").tap()
+        goToSection(app, "kids")
         XCTAssertTrue(el(app, "kidsScreen").waitForExistence(timeout: 30))
         sleep(2)
         snap(app, "kids-en")

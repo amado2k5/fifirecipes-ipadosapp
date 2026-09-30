@@ -1,11 +1,11 @@
-# App Store submission checklist — FiFi Recipes for iPad 1.0
+# App Store submission checklist — FiFi Recipes (universal) 1.0
 
 ## Identity
 
 | Item | Value |
 |------|-------|
 | Name | FiFi Recipes |
-| Bundle ID | `cooking.fifi.ipados` |
+| Bundle ID | `cooking.fifi.ios` |
 | Version | 1.0 |
 | Category | **Food & Drink** (NOT Kids — kids mode is a feature, app is for grown-ups) |
 | Copyright | © 2026 Dr. Fatma / FiFi |
@@ -16,7 +16,9 @@
 ## Technical compliance (done in-repo)
 
 - [x] Native SwiftUI app, not a hosted WebView (Guideline 4.2)
-- [x] iPad-only (`TARGETED_DEVICE_FAMILY=2`), min iPadOS 16
+- [x] Universal iPhone + iPad (`TARGETED_DEVICE_FAMILY="1,2"`), min iOS 16
+- [x] Adaptive navigation: `TabView` on compact (iPhone, Slide Over),
+      `NavigationSplitView` sidebar on regular width
 - [x] `PrivacyInfo.xcprivacy` — no required-reason APIs beyond declarations
 - [x] `ITSAppUsesNonExemptEncryption = false` (plain HTTPS only)
 - [x] `UILaunchScreen` configured
@@ -60,12 +62,11 @@ that no embed/analytics have crept in.
 - [ ] Real **Team ID** → replace `TEAMID` placeholder in the backend repo
       (`scripts/generate-public-index.ts`, `APPLE_TEAM_ID`) and redeploy —
       the AASA file already claims `/recipe/*`, `/chapter/*`, `/kids/*`
-      (shared with the iPhone app; add `cooking.fifi.ipados` to the appIDs
-      list there so Universal Links open this app too)
-- [ ] App Store Connect app record (SKU suggestion: `fifi-recipes-ipados`)
+      (shared by both app variants; `cooking.fifi.ios` +
+      `cooking.fifi.ipados` are both listed so either build opens links)
+- [ ] App Store Connect app record (SKU: `cooking.fifi.ios`)
 - [ ] Signing + archive + upload via Xcode
-- [ ] Screenshots: **13-inch iPad (2064×2752)** and **12.9-inch iPad Pro
-      2nd gen (2048×2732)** display sets — capture on sim/device;
-      `docs/screenshots/` has sim shots; App Store wants exact-size sets
+- [ ] Screenshots: ready in `store/` — **iPhone 6.9" (1320×2868)**,
+      **iPhone 6.5" (1284×2778)**, **iPad 13" (2064×2752)**
 - [ ] App Review notes: mention test account not needed (no login),
       videos require network

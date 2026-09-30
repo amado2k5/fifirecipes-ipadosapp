@@ -18,8 +18,77 @@ struct RootView: View {
         case .pickingLanguage:
             LanguagePickerView()
         case .ready:
-            MainSplitView()
+            AdaptiveNavigation()
         }
+    }
+}
+
+/// Universal shell: regular widths (iPad full screen, wide Split View,
+/// Stage Manager) get the sidebar split view; compact widths (iPhone,
+/// iPad Slide Over, narrow Split View) get the classic bottom tab bar.
+private struct AdaptiveNavigation: View {
+    @Environment(\.horizontalSizeClass) private var sizeClass
+
+    var body: some View {
+        if sizeClass == .regular {
+            MainSplitView()
+        } else {
+            MainTabs()
+        }
+    }
+}
+
+/// Compact shell: the original bottom tab bar — one NavigationStack per
+/// section so each keeps its own back stack, exactly like the split view.
+struct MainTabs: View {
+    @EnvironmentObject private var app: AppState
+
+    var body: some View {
+        TabView(selection: $app.selectedSection) {
+            NavigationStack(path: $app.homePath) {
+                HomeView()
+                    .fifiDestinations()
+                    .navigationTitle(app.s[.home])
+                    .toolbar(.hidden, for: .navigationBar)
+            }
+            .tabItem { Label(app.s[.home], systemImage: "house.fill") }
+            .tag(AppSection.home)
+
+            NavigationStack(path: $app.chaptersPath) {
+                ChaptersView()
+                    .fifiDestinations()
+                    .navigationTitle(app.s[.chapters])
+                    .toolbar(.hidden, for: .navigationBar)
+            }
+            .tabItem { Label(app.s[.chapters], systemImage: "books.vertical.fill") }
+            .tag(AppSection.chapters)
+
+            NavigationStack(path: $app.searchPath) {
+                SearchView()
+                    .fifiDestinations()
+                    .navigationTitle(app.s[.search])
+            }
+            .tabItem { Label(app.s[.search], systemImage: "magnifyingglass") }
+            .tag(AppSection.search)
+
+            NavigationStack(path: $app.kidsPath) {
+                KidsView()
+                    .fifiDestinations()
+                    .navigationTitle(app.s[.kids])
+                    .toolbar(.hidden, for: .navigationBar)
+            }
+            .tabItem { Label(app.s[.kids], systemImage: "face.smiling.inverse") }
+            .tag(AppSection.kids)
+
+            NavigationStack {
+                SettingsView()
+                    .navigationTitle(app.s[.settings])
+                    .toolbar(.hidden, for: .navigationBar)
+            }
+            .tabItem { Label(app.s[.settings], systemImage: "gearshape.fill") }
+            .tag(AppSection.settings)
+        }
+        .tint(Palette.leaf)
     }
 }
 

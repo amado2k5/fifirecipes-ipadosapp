@@ -128,7 +128,7 @@ final class UITourTests: XCTestCase {
         }
 
         // Chapters list + detail
-        el(app, "nav-chapters").tap()
+        goToSection(app, "chapters")
         XCTAssertTrue(el(app, "chaptersScreen").waitForExistence(timeout: 20))
         sleep(2)
         snap("tour-chapters-en")
@@ -142,7 +142,7 @@ final class UITourTests: XCTestCase {
         }
 
         // Search
-        el(app, "nav-search").tap()
+        goToSection(app, "search")
         let field = app.searchFields.firstMatch
         XCTAssertTrue(field.waitForExistence(timeout: 20))
         field.tap(); field.typeText("rice")
@@ -162,7 +162,7 @@ final class UITourTests: XCTestCase {
         }
         dismissSystemDialogs(app)
         for _ in 0..<4 {
-            el(app, "nav-settings").tap()
+            goToSection(app, "settings")
             if el(app, "settingsScreen").waitForExistence(timeout: 8) { break }
             dismissSystemDialogs(app)
         }
@@ -176,7 +176,7 @@ final class UITourTests: XCTestCase {
     func testKidsTour() throws {
         let app = XCUIApplication()
         launch(app, lang: "en")
-        el(app, "nav-kids").tap()
+        goToSection(app, "kids")
         XCTAssertTrue(el(app, "kidsScreen").waitForExistence(timeout: 30))
         sleep(2)
         snap("tour-kids-top")
@@ -227,7 +227,7 @@ final class UITourTests: XCTestCase {
             snap("tour-recipe-ar-mid")
             goBack(app)
         }
-        el(app, "nav-kids").tap() // Kids section
+        goToSection(app, "kids") // Kids section
         XCTAssertTrue(el(app, "kidsScreen").waitForExistence(timeout: 30))
         sleep(2)
         snap("tour-kids-ar")
@@ -275,7 +275,7 @@ final class UITourTests: XCTestCase {
             snap("tour-recipe-ax3-mid")
             goBack(app)
         }
-        el(app, "nav-kids").tap()
+        goToSection(app, "kids")
         XCTAssertTrue(el(app, "kidsScreen").waitForExistence(timeout: 30))
         sleep(2)
         snap("tour-kids-ax3")

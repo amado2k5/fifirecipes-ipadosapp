@@ -1,5 +1,23 @@
 import XCTest
 
+/// Section switcher that works in both shells: taps the sidebar row on
+/// regular width (iPad), else the tab-bar item (iPhone/compact) by fixed
+/// index — home, chapters, search, kids, settings.
+@MainActor
+func goToSection(_ app: XCUIApplication, _ id: String) {
+    let row = app.descendants(matching: .any)
+        .matching(NSPredicate(format: "identifier == %@", "nav-\(id)"))
+        .firstMatch
+    if row.waitForExistence(timeout: 6) {
+        row.tap()
+        return
+    }
+    let order = ["home", "chapters", "search", "kids", "settings"]
+    if let idx = order.firstIndex(of: id) {
+        app.tabBars.buttons.element(boundBy: idx).tap()
+    }
+}
+
 /// UI tests run against the live fifi.cooking API (the product is
 /// online-only); the offline test points the client at a dead origin via
 /// the -fifi.apiOrigin launch override.
@@ -46,14 +64,19 @@ final class FifiRecipesPadUITests: XCTestCase {
         launch(app, lang: "ar")
         XCTAssertTrue(el(app, "homeScreen").waitForExistence(timeout: 30))
 
-        // In RTL the sidebar sits at the trailing (right) edge — its x
-        // position should be right of center, not left.
-        let sidebar = el(app, "sidebar")
-        XCTAssertTrue(sidebar.waitForExistence(timeout: 10))
         let screenMid = app.windows.firstMatch.frame.midX
-        XCTAssertGreaterThan(sidebar.frame.midX, screenMid,
-                             "RTL: sidebar should sit on the right half")
-        XCTAssertTrue(el(app, "nav-home").waitForExistence(timeout: 10))
+        let sidebar = el(app, "sidebar")
+        if sidebar.waitForExistence(timeout: 8) {
+            // In RTL the sidebar sits at the trailing (right) edge.
+            XCTAssertGreaterThan(sidebar.frame.midX, screenMid,
+                                 "RTL: sidebar should sit on the right half")
+        } else {
+            // Compact shell (iPhone): the tab bar mirrors — Home moves right.
+            let firstTab = app.tabBars.buttons.element(boundBy: 0)
+            XCTAssertTrue(firstTab.waitForExistence(timeout: 8))
+            XCTAssertGreaterThan(firstTab.frame.midX, screenMid,
+                                 "RTL: first tab should sit on the right half")
+        }
     }
 
     // MARK: kids flow end-to-end
@@ -63,7 +86,7 @@ final class FifiRecipesPadUITests: XCTestCase {
         launch(app, lang: "en")
 
         XCTAssertTrue(el(app, "homeScreen").waitForExistence(timeout: 30))
-        el(app, "nav-kids").tap()
+        goToSection(app, "kids")
 
         let kidsGrid = el(app, "kidsScreen")
         XCTAssertTrue(kidsGrid.waitForExistence(timeout: 30))
@@ -104,7 +127,7 @@ final class FifiRecipesPadUITests: XCTestCase {
         launch(app, lang: "en")
 
         XCTAssertTrue(el(app, "homeScreen").waitForExistence(timeout: 30))
-        el(app, "nav-search").tap()
+        goToSection(app, "search")
 
         let field = app.searchFields.firstMatch
         XCTAssertTrue(field.waitForExistence(timeout: 20))

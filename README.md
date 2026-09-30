@@ -1,15 +1,16 @@
-# FiFi Recipes — iPadOS
+# FiFi Recipes — iOS & iPadOS (universal)
 
-Native SwiftUI iPad companion to [fifi.cooking](https://fifi.cooking), the
+Native SwiftUI companion to [fifi.cooking](https://fifi.cooking), the
 recipe site by Dr. Fatma / FiFi. Not a WebView wrapper: every screen is real
 SwiftUI consuming the static JSON API at `https://fifi.cooking/data/` — the
 same contract the Fire TV app uses (`docs/tv-api.md` in the `fifirecipes`
-repo, reference client in `fifirecipes-amazonfire`) and the sibling iPhone
-app in `fifirecipes-ios`.
+repo, reference client in `fifirecipes-amazonfire`). One universal binary:
+iPhone gets the bottom tab bar, iPad gets the sidebar split view, and iPad
+compact widths (Slide Over, narrow Split View) fall back to tabs.
 
-- **Bundle ID:** `cooking.fifi.ipados` · **Min iPadOS:** 16 · **Swift:** 6
-- **Devices:** iPad only (`TARGETED_DEVICE_FAMILY=2`) — iPad, iPad mini,
-  iPad Air, iPad Pro 11" and 13", portrait + landscape
+- **Bundle ID:** `cooking.fifi.ios` · **Min iOS/iPadOS:** 16 · **Swift:** 6
+- **Devices:** iPhone + iPad (`TARGETED_DEVICE_FAMILY="1,2"`) — iPad, iPad
+  mini, iPad Air, iPad Pro 11"/13", iPhone, portrait + landscape
 - **Dependencies:** none — URLSession, AsyncImage, WebKit, Foundation only
 
 ## Build & test
