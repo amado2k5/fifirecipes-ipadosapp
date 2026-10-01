@@ -23,12 +23,21 @@ jobs:
       - name: Pick an iPad simulator
         id: sim
         run: |
-          NAME=$(xcrun simctl list devices available | \
-            grep -oE 'iPad Pro 11-inch \([^)]*\)' | head -1 || true)
-          [ -z "$NAME" ] && NAME=$(xcrun simctl list devices available | \
-            grep -oE 'iPad [^(]*\([^)]*\)' | head -1 || true)
-          [ -z "$NAME" ] && NAME="iPad Pro 11-inch (M4)"
-          echo "name=$NAME" >> "$GITHUB_OUTPUT"
+          set -eo pipefail
+          SIM=$(xcrun simctl list devices available -j | python3 -c 'import json,sys; devs=json.load(sys.stdin)["devices"]; flat=[d for r,arr in devs.items() for d in arr if "iOS" in r and d["name"].startswith("iPad")]; pref=[d for d in flat if d["name"].startswith("iPad Pro 11-inch")]; d=(pref or flat or [None])[0]; print(d["udid"]+" "+d["name"] if d else "")')
+          if [ -z "$SIM" ]; then
+            echo "::error::no iPad simulator available on this runner"
+            exit 1
+          fi
+          echo "id=${SIM%% *}" >> "$GITHUB_OUTPUT"
+          echo "Using simulator: ${SIM#* }"
+
+      # A cold simulator can take longer than XCUITest's 60s app-launch
+      # timeout, failing whichever UI test runs first — boot it and wait.
+      - name: Boot simulator
+        run: |
+          xcrun simctl boot "${{ steps.sim.outputs.id }}" || true
+          xcrun simctl bootstatus "${{ steps.sim.outputs.id }}" -b
 
       # UITourTests and ScreenshotTests are manual-QA screenshot suites —
       # they interact with system dialogs (dictation, keyboard onboarding)
@@ -38,9 +47,10 @@ jobs:
           xcodebuild
           -project FifiRecipesPad.xcodeproj
           -scheme FifiRecipesPad
-          -destination 'platform=iOS Simulator,name=${{ steps.sim.outputs.name }}'
+          -destination 'platform=iOS Simulator,id=${{ steps.sim.outputs.id }}'
           -configuration Debug
           clean test
           -only-testing:FifiRecipesPadTests
           -only-testing:FifiRecipesPadUITests/FifiRecipesPadUITests
+          -parallel-testing-enabled NO
           CODE_SIGNING_ALLOWED=NO
