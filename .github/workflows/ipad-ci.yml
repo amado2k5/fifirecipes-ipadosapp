@@ -30,6 +30,9 @@ jobs:
           [ -z "$NAME" ] && NAME="iPad Pro 11-inch (M4)"
           echo "name=$NAME" >> "$GITHUB_OUTPUT"
 
+      # UITourTests and ScreenshotTests are manual-QA screenshot suites —
+      # they interact with system dialogs (dictation, keyboard onboarding)
+      # that don't exist on a fresh CI sim, so they run locally, not here.
       - name: Build and test
         run: >-
           xcodebuild
@@ -38,4 +41,6 @@ jobs:
           -destination 'platform=iOS Simulator,name=${{ steps.sim.outputs.name }}'
           -configuration Debug
           clean test
+          -only-testing:FifiRecipesPadTests
+          -only-testing:FifiRecipesPadUITests/FifiRecipesPadUITests
           CODE_SIGNING_ALLOWED=NO
