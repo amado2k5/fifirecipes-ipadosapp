@@ -41,6 +41,18 @@ final class FifiRecipesPadUITests: XCTestCase {
             .firstMatch
     }
 
+    /// Horizontal middle of the screen. On a busy CI simulator the window
+    /// snapshot can time out and report an unresolved (infinite) frame, so
+    /// retry, then fall back to the app element's own frame.
+    private func screenMidX(_ app: XCUIApplication) -> CGFloat {
+        for _ in 0..<3 {
+            let mid = app.windows.firstMatch.frame.midX
+            if mid.isFinite { return mid }
+            sleep(2)
+        }
+        return app.frame.midX
+    }
+
     // MARK: first-run picker → home
 
     func testFirstRunLanguagePickerThenHome() throws {
@@ -64,7 +76,8 @@ final class FifiRecipesPadUITests: XCTestCase {
         launch(app, lang: "ar")
         XCTAssertTrue(el(app, "homeScreen").waitForExistence(timeout: 30))
 
-        let screenMid = app.windows.firstMatch.frame.midX
+        let screenMid = screenMidX(app)
+        XCTAssertTrue(screenMid.isFinite, "could not read the screen frame")
         let sidebar = el(app, "sidebar")
         if sidebar.waitForExistence(timeout: 8) {
             // In RTL the sidebar sits at the trailing (right) edge.
