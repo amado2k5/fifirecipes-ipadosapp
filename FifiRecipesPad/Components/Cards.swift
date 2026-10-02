@@ -100,9 +100,11 @@ struct RecipeCardView: View {
     }
 
     private var imageURL: URL? {
-        // Retina-aware: card2x beats the 800px card thumbnail when present.
+        // The 800px thumbnail already covers the widest card (240pt @2x,
+        // 200pt @3x). card2x is the full ~650 KB photo, and rails build every
+        // card eagerly, so using it meant 100+ full-size downloads on launch.
         let info = app.images[card.id]
-        return app.assetURL(info?.card2x ?? card.image)
+        return app.assetURL(info?.card ?? card.image)
     }
 }
 
