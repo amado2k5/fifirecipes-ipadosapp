@@ -41,6 +41,11 @@ final class FifiRecipesPadUITests: XCTestCase {
             .firstMatch
     }
 
+    /// Home renders after the live feed fetch. On a slow CI runner the first
+    /// launch on a fresh simulator has taken ~55s, so allow 90s (as the tvOS
+    /// tests do); a passing run returns as soon as Home appears.
+    private let homeTimeout: TimeInterval = 90
+
     /// Horizontal middle of the screen. On a busy CI simulator the window
     /// snapshot can time out and report an unresolved (infinite) frame, so
     /// retry, then fall back to the app element's own frame.
@@ -66,7 +71,7 @@ final class FifiRecipesPadUITests: XCTestCase {
         XCTAssertTrue(english.waitForExistence(timeout: 10))
         english.tap()
 
-        XCTAssertTrue(el(app, "homeScreen").waitForExistence(timeout: 30))
+        XCTAssertTrue(el(app, "homeScreen").waitForExistence(timeout: homeTimeout))
     }
 
     // MARK: RTL smoke — Arabic mirrors the layout
@@ -74,7 +79,7 @@ final class FifiRecipesPadUITests: XCTestCase {
     func testArabicRTLLayout() throws {
         let app = XCUIApplication()
         launch(app, lang: "ar")
-        XCTAssertTrue(el(app, "homeScreen").waitForExistence(timeout: 30))
+        XCTAssertTrue(el(app, "homeScreen").waitForExistence(timeout: homeTimeout))
 
         let screenMid = screenMidX(app)
         XCTAssertTrue(screenMid.isFinite, "could not read the screen frame")
@@ -98,7 +103,7 @@ final class FifiRecipesPadUITests: XCTestCase {
         let app = XCUIApplication()
         launch(app, lang: "en")
 
-        XCTAssertTrue(el(app, "homeScreen").waitForExistence(timeout: 30))
+        XCTAssertTrue(el(app, "homeScreen").waitForExistence(timeout: homeTimeout))
         goToSection(app, "kids")
 
         let kidsGrid = el(app, "kidsScreen")
@@ -139,7 +144,7 @@ final class FifiRecipesPadUITests: XCTestCase {
         let app = XCUIApplication()
         launch(app, lang: "en")
 
-        XCTAssertTrue(el(app, "homeScreen").waitForExistence(timeout: 30))
+        XCTAssertTrue(el(app, "homeScreen").waitForExistence(timeout: homeTimeout))
         goToSection(app, "search")
 
         let field = app.searchFields.firstMatch
