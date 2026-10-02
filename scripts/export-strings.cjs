@@ -21,8 +21,8 @@ const mod = jiti(stringsPath);
 const { STRINGS, EN } = mod;
 
 if (!STRINGS || !EN) throw new Error('STRINGS/EN exports not found in strings.ts');
-if (Object.keys(STRINGS).length !== 24) {
-  throw new Error(`expected 24 languages, got ${Object.keys(STRINGS).length}`);
+if (Object.keys(STRINGS).length !== 25) {
+  throw new Error(`expected 25 languages, got ${Object.keys(STRINGS).length}`);
 }
 
 // iPadOS wording overrides — the TV table references a remote control / OK
@@ -148,6 +148,12 @@ const OVERRIDES = {
     searchHint: 'Skriv ett ord — goda recept visas nedan.',
     tickHint: 'Tryck för att bocka av det du har',
     aboutText: 'FiFi Recipes tar dr Fatmas älskade egyptiska hemköksrecept till din iPad — bläddra, välj, laga. Data: fifi.cooking.',
+  },
+  te: {
+    searchHint: 'ఒక పదం టైప్ చేయండి — రుచికరమైన వంటకాలు కింద కనిపిస్తాయి.',
+    tickHint: 'మీ దగ్గర ఉన్నవి టిక్ చేయడానికి ట్యాప్ చేయండి',
+    aboutText: 'FiFi Recipes డాక్టర్ ఫాతిమా ప్రియమైన ఈజిప్టు ఇంటి వంటకాలను మీ iPadకి తెస్తుంది — చూడండి, ఎంచుకోండి, వండండి. డేటా: fifi.cooking.',
+    errorBody: 'మీ వంటకాలు తేలేకపోయాం. ఇంటర్నెట్ కనెక్షన్ చూసి, మళ్లీ ప్రయత్నించండి ట్యాప్ చేయండి.',
   },
 };
 
