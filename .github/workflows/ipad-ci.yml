@@ -10,7 +10,18 @@ on:
 
 jobs:
   test:
+    name: test (${{ matrix.device }})
     runs-on: macos-latest
+    # One universal binary: the iPad sidebar shell and the iPhone tab-bar
+    # shell both ship from this repo, so test each on its own simulator.
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - device: iPad
+            prefer: iPad Pro 11-inch
+          - device: iPhone
+            prefer: iPhone 17
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
@@ -18,15 +29,18 @@ jobs:
       - name: Select latest Xcode
         run: sudo xcode-select -s "$(ls -d /Applications/Xcode*.app | sort -V | tail -1)"
 
-      # Runner images don't all carry the same iPad simulator names — pick
-      # whatever 11-inch Pro exists, else any iPad.
-      - name: Pick an iPad simulator
+      # Runner images don't all carry the same simulator names — pick the
+      # preferred model if it exists, else any device of the same family.
+      - name: Pick an ${{ matrix.device }} simulator
         id: sim
+        env:
+          FAMILY: ${{ matrix.device }}
+          PREFER: ${{ matrix.prefer }}
         run: |
           set -eo pipefail
-          SIM=$(xcrun simctl list devices available -j | python3 -c 'import json,sys; devs=json.load(sys.stdin)["devices"]; flat=[d for r,arr in devs.items() for d in arr if "iOS" in r and d["name"].startswith("iPad")]; pref=[d for d in flat if d["name"].startswith("iPad Pro 11-inch")]; d=(pref or flat or [None])[0]; print(d["udid"]+" "+d["name"] if d else "")')
+          SIM=$(xcrun simctl list devices available -j | python3 -c 'import json,os,sys; devs=json.load(sys.stdin)["devices"]; fam=os.environ["FAMILY"]; flat=[d for r,arr in devs.items() for d in arr if "iOS" in r and d["name"].startswith(fam)]; p=os.environ["PREFER"]; pref=[d for d in flat if d["name"]==p] or [d for d in flat if d["name"].startswith(p)]; d=(pref or flat or [None])[0]; print(d["udid"]+" "+d["name"] if d else "")')
           if [ -z "$SIM" ]; then
-            echo "::error::no iPad simulator available on this runner"
+            echo "::error::no $FAMILY simulator available on this runner"
             exit 1
           fi
           echo "id=${SIM%% *}" >> "$GITHUB_OUTPUT"
