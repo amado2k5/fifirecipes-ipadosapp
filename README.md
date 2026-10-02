@@ -11,7 +11,15 @@ compact widths (Slide Over, narrow Split View) fall back to tabs.
 - **Bundle ID:** `cooking.fifi.ipados` · **Min iOS/iPadOS:** 16 · **Swift:** 6
 - **Devices:** iPhone + iPad (`TARGETED_DEVICE_FAMILY="1,2"`) — iPad, iPad
   mini, iPad Air, iPad Pro 11"/13", iPhone, portrait + landscape
-- **Dependencies:** none — URLSession, AsyncImage, WebKit, Foundation only
+- **Dependencies:** none — URLSession, WebKit, Foundation only
+
+> [!NOTE]
+> **This repo replaces [fifirecipes-ios](https://github.com/amado2k5/fifirecipes-ios),
+> which is being archived.** That iPhone-only app (`cooking.fifi.ios`) has
+> been folded in here: the iPhone tab-bar shell, its fixes and its
+> translations all live in this universal app, CI runs the tests on both an
+> iPad and an iPhone 17 simulator, and the support/privacy pages at
+> `ipadosapp.fifi.cooking` cover iPhone and iPad. Make iPhone changes here.
 
 ## Build & test
 
