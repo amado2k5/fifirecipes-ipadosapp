@@ -18,7 +18,11 @@ struct RemoteImage: View {
     @State private var failed = false
 
     var body: some View {
-        ZStack {
+        // A .fill image reports its overflowing size as its own, so clipping
+        // the image itself clips nothing. Lay it out over a Color.clear that
+        // takes exactly the offered frame and clip that instead — otherwise
+        // the hero photo spills under the title and chips below it.
+        Color.clear.overlay {
             if let image {
                 Image(uiImage: image)
                     .resizable()
