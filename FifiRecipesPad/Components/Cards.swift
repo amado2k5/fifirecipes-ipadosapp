@@ -43,6 +43,32 @@ struct MetaChip: View {
     }
 }
 
+/// Frosted off-white panel behind text that sits on or next to a photo:
+/// blurred material for depth, a warm paper tint so dark ink keeps its
+/// contrast whatever the image underneath looks like.
+struct TitlePanel: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .padding(18)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background {
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .fill(.ultraThinMaterial)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                            .fill(Palette.card.opacity(0.86)))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                            .stroke(Palette.cardBorder, lineWidth: 1))
+                    .shadow(color: Palette.ink.opacity(0.12), radius: 20, y: 6)
+            }
+    }
+}
+
+extension View {
+    func titlePanel() -> some View { modifier(TitlePanel()) }
+}
+
 /// Recipe card used in rails, grids and search results.
 struct RecipeCardView: View {
     let card: RecipeCard

@@ -115,7 +115,7 @@ struct RecipeDetailView: View {
             RemoteImage(url: heroURL, cornerRadius: 20)
                 .frame(maxWidth: .infinity)
                 .frame(height: isWide ? 340 : 240)
-                .overlay(alignment: .bottomTrailing) {
+                .overlay(alignment: .topTrailing) {
                     Image(systemName: "arrow.up.left.and.arrow.down.right")
                         .font(.caption.weight(.bold))
                         .foregroundStyle(.white)
@@ -174,7 +174,11 @@ struct RecipeDetailView: View {
             heroImage(title: loc.title)
                 .padding(.horizontal)
             metaBlock(loc)
-                .padding(.horizontal)
+                .titlePanel()
+                // Lift the panel over the bottom of the photo, inset so the
+                // picture frames it.
+                .padding(.top, -44)
+                .padding(.horizontal, 28)
         }
     }
 
@@ -186,8 +190,7 @@ struct RecipeDetailView: View {
             heroImage(title: loc.title)
                 .frame(width: min(560, detailWidth * 0.45))
             metaBlock(loc)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.top, 6)
+                .titlePanel()
         }
         .padding(.horizontal)
     }
