@@ -55,7 +55,7 @@ FifiRecipesPad/
 │                   ?v= versioned requests, in-flight + URLCache caching,
 │                   kids English-fallback on 404; AssetURL resolver
 ├── Models/         Codable models mirroring src/api/types.ts
-├── Localization/   Strings (24 languages from bundled ui-strings.json,
+├── Localization/   Strings (25 languages from bundled ui-strings.json,
 │                   allergen map) + RecipeLocalization (ar master-fallback,
 │                   never-English cultural notes, ui.text/textEn precedence)
 ├── Theme/          Palette (fresh-market colors) + FifiFont
@@ -92,7 +92,7 @@ FifiRecipesPad/
 
 ### Localization
 
-24 languages, RTL (`ar`, `ur`, `fa`, `ps`, `he`, `ku`) flips layout via
+25 languages, RTL (`ar`, `ur`, `fa`, `ps`, `he`, `ku`) flips layout via
 `.environment(\.layoutDirection)` — the sidebar mirrors to the trailing
 edge automatically. UI strings and allergen names are bundled from the TV
 repo's `strings.ts` (via `scripts/export-strings.cjs` → `ui-strings.json`,
