@@ -37,7 +37,9 @@ final class AppState: ObservableObject {
     /// Per-section navigation — keeps standard NavigationSplitView +
     /// NavigationStack chrome, which adapts to Split View, Slide Over and
     /// Stage Manager window sizes for free.
-    @Published var selectedSection: AppSection = .home
+    @Published var selectedSection: AppSection = .home {
+        didSet { if selectedSection == .home, oldValue != .home { refreshFeed() } }
+    }
     @Published var homePath = NavigationPath()
     @Published var chaptersPath = NavigationPath()
     @Published var searchPath = NavigationPath()
@@ -50,6 +52,17 @@ final class AppState: ObservableObject {
     }
 
     var s: Strings { Strings(lang: lang) }
+
+    /// Back on Home from another tab: ask for a fresh home layout — the server
+    /// returns a different random hero + rails on every request. Failures keep
+    /// the current feed.
+    private func refreshFeed() {
+        let code = lang
+        Task {
+            guard let fresh = try? await api.feed(lang: code), code == lang else { return }
+            feed = fresh
+        }
+    }
 
     /// Section selection callable from Command menus / keyboard shortcuts,
     /// whose action closures run in a nonisolated context.
