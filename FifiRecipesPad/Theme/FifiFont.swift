@@ -8,6 +8,8 @@ import UIKit
 ///   ur                   → Noto Nastaliq Urdu (tall Nastaliq line height)
 ///   he                   → Heebo
 ///   bn                   → Noto Sans Bengali
+///   vi                   → Plus Jakarta Sans (Latin + diacritics — no extra
+///                          faces; kids stays on Baloo 2, which covers vi too)
 ///   kids mode            → Baloo 2 / Baloo Bhaijaan 2 (kids-RTL) / Heebo (he)
 ///                          / Baloo Da 2 (bn)
 ///
@@ -32,6 +34,7 @@ enum FifiFonts {
         case "fa": return "Vazirmatn"
         case "he": return "Heebo"
         case "bn": return "NotoSansBengali"
+        case "vi": return "PlusJakartaSans"
         case let l where rtlLanguages.contains(l): return "Tajawal"
         default: return "PlusJakartaSans"
         }

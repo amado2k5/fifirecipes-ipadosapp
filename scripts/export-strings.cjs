@@ -21,8 +21,8 @@ const mod = jiti(stringsPath);
 const { STRINGS, EN } = mod;
 
 if (!STRINGS || !EN) throw new Error('STRINGS/EN exports not found in strings.ts');
-if (Object.keys(STRINGS).length !== 26) {
-  throw new Error(`expected 26 languages, got ${Object.keys(STRINGS).length}`);
+if (Object.keys(STRINGS).length !== 27) {
+  throw new Error(`expected 27 languages, got ${Object.keys(STRINGS).length}`);
 }
 
 // iPhone/iPad wording overrides — the TV table references a remote control /
@@ -161,6 +161,12 @@ const OVERRIDES = {
     tickHint: 'যা আছে তা টিক দিতে টোকা দিন',
     aboutText: 'FiFi Recipes ড. ফাতমার প্রিয় মিশরীয় ঘরের রান্না আপনার iPhone ও iPad-এ নিয়ে আসে — ব্রাউজ করুন, রেসিপি বেছে নিন, একসাথে রান্না করুন। রেসিপির তথ্য সদ্য fifi.cooking থেকে আসে।',
     errorBody: 'রেসিপিগুলো আনা গেল না। ইন্টারনেট সংযোগ দেখে নিন, তারপর "আবার চেষ্টা করুন"-এ টোকা দিন।',
+  },
+  vi: {
+    searchHint: 'Nhập một từ — các công thức ngon sẽ hiện bên dưới.',
+    tickHint: 'Chạm để đánh dấu những gì bạn có',
+    aboutText: 'FiFi Recipes mang những món ăn gia đình Ai Cập yêu thích của bác sĩ Fatma đến iPhone và iPad của bạn — duyệt, chọn một công thức và cùng nhau nấu. Dữ liệu công thức được cung cấp tươi mới từ fifi.cooking.',
+    errorBody: 'Không tải được công thức của bạn. Kiểm tra kết nối internet rồi chạm vào "Thử lại".',
   },
 };
 
