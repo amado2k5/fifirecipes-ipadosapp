@@ -7,7 +7,9 @@ import UIKit
 ///   fa                   → Vazirmatn
 ///   ur                   → Noto Nastaliq Urdu (tall Nastaliq line height)
 ///   he                   → Heebo
+///   bn                   → Noto Sans Bengali
 ///   kids mode            → Baloo 2 / Baloo Bhaijaan 2 (kids-RTL) / Heebo (he)
+///                          / Baloo Da 2 (bn)
 ///
 /// All returned fonts scale with Dynamic Type (`relativeTo:`); body text is
 /// never fixed-point. If a bundled face is missing we fall back to the system
@@ -22,12 +24,14 @@ enum FifiFonts {
     static func family(lang: String, kids: Bool) -> String {
         if kids {
             if lang == "he" { return "Heebo" }
+            if lang == "bn" { return "BalooDa2" }
             return rtlLanguages.contains(lang) ? "BalooBhaijaan2" : "Baloo2"
         }
         switch lang {
         case "ur": return "NotoNastaliqUrdu"
         case "fa": return "Vazirmatn"
         case "he": return "Heebo"
+        case "bn": return "NotoSansBengali"
         case let l where rtlLanguages.contains(l): return "Tajawal"
         default: return "PlusJakartaSans"
         }
@@ -36,13 +40,13 @@ enum FifiFonts {
     /// Weight → PostScript suffix, per bundled face set.
     private static func suffix(family: String, weight: Weight) -> String {
         switch family {
-        case "Baloo2", "BalooBhaijaan2":
+        case "Baloo2", "BalooBhaijaan2", "BalooDa2":
             switch weight {
             case .regular: return "Regular"
             case .medium: return "SemiBold"
             case .bold, .heavy: return "ExtraBold"
             }
-        case "Vazirmatn", "Heebo":
+        case "Vazirmatn", "Heebo", "NotoSansBengali":
             switch weight {
             case .regular: return "Regular"
             case .medium: return "Medium"
