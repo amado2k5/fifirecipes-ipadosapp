@@ -75,3 +75,11 @@ jobs:
       - name: Annotate failing tests
         if: failure()
         run: python3 scripts/ci-annotate-failures.py test-results.xcresult
+
+      - name: Upload test results on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.device }}-xcresult
+          path: test-results.xcresult
+          retention-days: 7
