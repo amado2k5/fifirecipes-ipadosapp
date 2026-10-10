@@ -21,8 +21,8 @@ const mod = jiti(stringsPath);
 const { STRINGS, EN } = mod;
 
 if (!STRINGS || !EN) throw new Error('STRINGS/EN exports not found in strings.ts');
-if (Object.keys(STRINGS).length !== 29) {
-  throw new Error(`expected 29 languages, got ${Object.keys(STRINGS).length}`);
+if (Object.keys(STRINGS).length !== 30) {
+  throw new Error(`expected 30 languages, got ${Object.keys(STRINGS).length}`);
 }
 
 // iPhone/iPad wording overrides — the TV table references a remote control /
@@ -173,6 +173,12 @@ const OVERRIDES = {
     tickHint: 'Prek për të shënuar çfarë ke',
     aboutText: 'FiFi Recipes të sjell gatimin e dashur shtëpiak egjiptian të Dr. Fatmës në iPhone dhe iPad tënd — shfleto, zgjidh një recetë dhe gato bashkë. Të dhënat e recetave vijnë të freskëta nga fifi.cooking.',
     errorBody: 'Nuk mundëm t’i merrnim recetat. Kontrollo lidhjen e internetit, pastaj prek Provo përsëri.',
+  },
+  ro: {
+    searchHint: 'Scrieți un cuvânt — rezultate gustoase apar mai jos.',
+    tickHint: 'Atingeți pentru a bifa ce aveți',
+    aboutText: 'FiFi Recipes aduce iubita bucătărie de casă egipteană a dr. Fatma pe iPhone și iPad — răsfoiți, alegeți o rețetă și gătiți împreună. Datele rețetelor vin proaspete de la fifi.cooking.',
+    errorBody: 'Nu am putut aduce rețetele. Verificați conexiunea la internet, apoi atingeți Reîncercare.',
   },
 };
 
