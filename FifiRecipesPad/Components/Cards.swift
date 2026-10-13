@@ -34,6 +34,8 @@ struct MetaChip: View {
             }
             Text(text)
         }
+        // One line only: a capsule must never wrap its text when space is tight.
+        .lineLimit(1)
         .fifiFont(.subheadline, weight: .medium)
         .foregroundStyle(tone.fg)
         .padding(.horizontal, 14)

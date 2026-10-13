@@ -46,11 +46,12 @@ struct HomeView: View {
                             .foregroundStyle(.white)
                             .lineLimit(2)
                             .multilineTextAlignment(.leading)
-                        HStack(spacing: 8) {
-                            MetaChip(text: card.prepTime ?? "", tone: .leaf)
-                                .opacity(card.prepTime == nil ? 0 : 1)
-                            MetaChip(text: card.cookTime ?? "", tone: .tomato)
-                                .opacity(card.cookTime == nil ? 0 : 1)
+                        // Side by side when they fit; stacked otherwise. A plain HStack
+                        // squeezed the cook chip into a sliver on iPhone when the prep
+                        // time was long ("1 hr + 3 hr chilling and rising").
+                        ViewThatFits(in: .horizontal) {
+                            HStack(spacing: 8) { heroChips(card) }
+                            VStack(alignment: .leading, spacing: 8) { heroChips(card) }
                         }
                     }
                     .padding(20)
@@ -66,6 +67,12 @@ struct HomeView: View {
             .fifiCardActions(recipeID: card.id)
             .accessibilityLabel(card.title)
         }
+    }
+
+    @ViewBuilder
+    private func heroChips(_ card: RecipeCard) -> some View {
+        if let v = card.prepTime { MetaChip(text: v, tone: .leaf) }
+        if let v = card.cookTime { MetaChip(text: v, tone: .tomato) }
     }
 
     private func heroURL(_ card: RecipeCard) -> URL? {
